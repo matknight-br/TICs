@@ -10,11 +10,9 @@
             --secondary: #24292e;
             --bg: #f6f8fa;
             --text: #333;
-            --success: #28a745;
-            --error: #d9534f;
         }
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg);
             color: var(--text);
             line-height: 1.6;
@@ -25,10 +23,9 @@
         h1, h2, h3 { color: var(--secondary); }
         h1 { text-align: center; border-bottom: 3px solid var(--primary); padding-bottom: 10px; }
         .section { margin-bottom: 40px; padding: 20px; background: #fff; border-left: 5px solid var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .btn { display: inline-block; background: var(--primary); color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; transition: background 0.3s; }
-        .btn:hover { background: #0b99c9; }
+        .btn { display: inline-block; background: var(--primary); color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; }
+        .btn:hover { background: #0b9qc9; }
         
-        /* Flashcards */
         .flashcard-container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
         .flashcard { width: 250px; height: 150px; perspective: 1000px; cursor: pointer; }
         .flashcard-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
@@ -37,17 +34,12 @@
         .flashcard-front { background-color: var(--secondary); color: white; font-weight: bold; }
         .flashcard-back { background-color: white; color: var(--secondary); transform: rotateY(180deg); border: 2px solid var(--secondary); }
 
-        /* Quiz */
-        .quiz-container { background: #eef2f5; padding: 25px; border-radius: 8px; margin-top: 20px; }
-        .question-block { margin-bottom: 30px; border-bottom: 1px solid #ddd; padding-bottom: 20px; }
-        .question-block:last-child { border-bottom: none; }
-        .question-text { margin-bottom: 15px; font-weight: bold; color: var(--secondary); }
+        .quiz-container { background: #eef2f5; padding: 20px; border-radius: 8px; margin-top: 20px; }
+        .question { margin-top: 20px; margin-bottom: 10px; font-weight: bold; }
         .options { list-style: none; padding: 0; }
         .options li { margin-bottom: 10px; }
-        .options label { cursor: pointer; display: block; padding: 12px; background: white; border-radius: 4px; border: 1px solid #ddd; transition: all 0.2s; }
-        .options label:hover { border-color: var(--primary); background: #f0faff; }
-        .options input { margin-right: 10px; }
-        #quiz-result { margin-top: 20px; font-weight: bold; font-size: 1.2em; padding: 15px; border-radius: 5px; display: none; }
+        .options label { cursor: pointer; display: block; padding: 10px; background: white; border-radius: 4px; border: 1px solid #ddd; }
+        #quiz-result { margin-top: 20px; font-weight: bold; font-size: 1.2em; }
     </style>
 </head>
 <body>
@@ -63,89 +55,107 @@
         <ul>
             <li><strong>Conflito de versões:</strong> Uma aplicação exige uma versão específica de uma biblioteca e outra aplicação no mesmo servidor exige uma versão diferente.</li>
             <li><strong>"Na minha máquina funciona":</strong> O ambiente de desenvolvimento é diferente do ambiente de produção.</li>
-            <li><strong>Desperdício de recursos:</strong> Criar várias Máquinas Virtuais (VMs) consome muito processamento e memória.</li>
+            <li><strong>Desperdício de recursos:</strong> Criar várias Máquinas Virtuais (VMs) consome muito processamento e memória (cada VM precisa de seu próprio Sistema Operacional).</li>
         </ul>
 
-        <p><strong>O que é um ambiente orquestrado:</strong> Em vez de virtualizar o hardware, empacotamos a aplicação e suas dependências em <strong>Containers</strong>. O orquestrador (ex: Kubernetes) gerencia esses containers: reinicia falhas, escala recursos e distribui tráfego.</p>
+        <p><strong>O que é um ambiente orquestrado (Containerização):</strong> Em vez de virtualizar o hardware, nós empacotamos a aplicação e suas dependências em "Containers" (ex: Docker). O orquestrador (ex: Kubernetes ou Docker Swarm) é o maestro que gerencia esses containers: ele os reinicia se falharem, escala para mais máquinas se houver muito acesso e distribui a rede entre eles.</p>
+        
+        <p><strong>Vantagens:</strong> Isolamento total de processos, portabilidade, uso leve da infraestrutura e escalabilidade automatizada.</p>
     </div>
 
     <div class="section" id="imersao">
         <h2>2. Imersão</h2>
         <h3>Situação Problema</h3>
-        <p>Você gerencia um servidor Ubuntu com um sistema legado em <strong>Python 2.7</strong>. Uma nova API exige <strong>Python 3.10</strong>. A instalação direta está causando quebras no sistema antigo.</p>
+        <p>Você gerencia um servidor Ubuntu que hospeda um sistema legado em Python 2.7. Agora, a equipe de desenvolvimento criou uma nova API de inteligência artificial fantástica que exige estritamente o Python 3.10. Instalar as duas versões e suas bibliotecas diretamente no servidor está causando quebras no sistema antigo e conflitos de dependência no Ubuntu.</p>
         
         <h3>Análise da Infraestrutura</h3>
         <ul>
-            <li><strong>Ponto de falha:</strong> Acoplamento forte com o SO.</li>
-            <li><strong>Solução:</strong> Isolar cada versão em seu próprio container.</li>
+            <li><strong>Ponto de falha atual:</strong> Acoplamento forte entre as aplicações e o SO hospedeiro.</li>
+            <li><strong>Justificativa para orquestrar:</strong> Isolar a aplicação legado e a nova API em containers separados. Isso permite que ambas rodem na mesma máquina física, cada uma com seu próprio ambiente perfeitamente isolado.</li>
+        </ul>
+
+        <h3>Recursos para Entendimento</h3>
+        <ul>
+            <li><a href="https://docs.docker.com/get-started/" target="_blank">Documentação Oficial: Docker Get Started</a></li>
+            <li><a href="https://kubernetes.io/pt-br/docs/concepts/overview/what-is-kubernetes/" target="_blank">O que é Kubernetes?</a></li>
         </ul>
     </div>
 
-    <div class="section" id="consolidacao">
-        <h2>3. Consolidação e Quiz Final</h2>
+    <div class="section" id="pratica">
+        <h2>3. Prática (Mão na Massa)</h2>
+        <p>Vamos simular a migração desse ambiente virtualizado conflituoso para um orquestrado.</p>
+        <p><strong>Ferramenta:</strong> Acesse o <a href="https://replit.com/" target="_blank">Replit</a> ou use o terminal do seu próprio ambiente Linux para criar um projeto e escrever dois arquivos fundamentais.</p>
         
+        <ol>
+            <li><strong>O Dockerfile (Empacotando a nova API):</strong> Crie a receita da sua aplicação definindo a imagem base, instalando dependências e expondo a porta.</li>
+            <li><strong>O docker-compose.yml (Mini-Orquestração):</strong> Escreva o arquivo que sobe o banco de dados e a aplicação simultaneamente, conectando-os em uma rede virtual isolada.</li>
+        </ol>
+        <p><em>Desafio:</em> Tente subir os dois containers com o comando <code>docker-compose up -d</code> e veja sua aplicação rodando isolada do sistema operacional host!</p>
+    </div>
+
+    <div class="section" id="consolidacao">
+        <h2>4. Consolidação</h2>
+        <p>Teste seus conhecimentos sobre o processo de migração e os conceitos fundamentais.</p>
+
         <h3>Flashcards de Revisão</h3>
         <div class="flashcard-container">
             <div class="flashcard" onclick="this.classList.toggle('flip')">
                 <div class="flashcard-inner">
                     <div class="flashcard-front">Imagem Docker</div>
-                    <div class="flashcard-back">Um pacote imutável contendo código, bibliotecas e configurações.</div>
+                    <div class="flashcard-back">Um pacote imutável contendo código, bibliotecas e configurações necessárias para rodar um container.</div>
                 </div>
             </div>
             <div class="flashcard" onclick="this.classList.toggle('flip')">
                 <div class="flashcard-inner">
                     <div class="flashcard-front">Dockerfile</div>
-                    <div class="flashcard-back">Arquivo de texto com a "receita" para construir uma imagem.</div>
+                    <div class="flashcard-back">Um arquivo de texto com as "receitas" (instruções) para construir uma Imagem Docker passo a passo.</div>
+                </div>
+            </div>
+            <div class="flashcard" onclick="this.classList.toggle('flip')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">Orquestrador</div>
+                    <div class="flashcard-back">Ferramenta que automatiza a implantação, escalabilidade e gerenciamento de vários containers.</div>
                 </div>
             </div>
         </div>
 
         <hr style="margin: 40px 0; border: 1px solid #ddd;">
 
-        <h3>Quiz de Avaliação</h3>
-        <div class="quiz-container" id="quiz-form">
-            
-            <div class="question-block">
-                <div class="question-text">1. Durante a migração de uma aplicação para containers, o sistema não encontrou o banco de dados. Qual a prática recomendada?</div>
-                <ul class="options">
-                    <li><label><input type="radio" name="q1" value="a"> Instalar o banco dentro do mesmo container da aplicação.</label></li>
-                    <li><label><input type="radio" name="q1" value="b"> Criar um container separado para o banco e conectá-los via rede Docker.</label></li>
-                    <li><label><input type="radio" name="q1" value="c"> Rodar o banco manualmente no Windows do desenvolvedor.</label></li>
-                    <li><label><input type="radio" name="q1" value="d"> Desabilitar o firewall do servidor Ubuntu hospedeiro.</label></li>
-                </ul>
-            </div>
+        <h3>Quiz: Situação de Migração e Conceitos</h3>
+        <div class="quiz-container">
+            <div class="question">1. Durante a migração da aplicação legado para containers, o sistema acusou que não encontrava o banco de dados. Qual é a prática recomendada?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q1" value="a"> Instalar o banco de dados dentro do mesmo container da aplicação.</label></li>
+                <li><label><input type="radio" name="q1" value="b"> Criar um container separado para o banco e conectá-los via rede Docker.</label></li>
+                <li><label><input type="radio" name="q1" value="c"> Manter o banco no host e acessá-lo via IP público sem autenticação.</label></li>
+                <li><label><input type="radio" name="q1" value="d"> Desistir da containerização do banco e usar apenas VMs tradicionais.</label></li>
+            </ul>
 
-            <div class="question-block">
-                <div class="question-text">2. Por que usar containers resolve o problema "Na minha máquina funciona"?</div>
-                <ul class="options">
-                    <li><label><input type="radio" name="q2" value="a"> Porque ele empacota dependências e bibliotecas junto com a aplicação.</label></li>
-                    <li><label><input type="radio" name="q2" value="b"> Porque ele converte automaticamente código Python 2 para Python 3.</label></li>
-                    <li><label><input type="radio" name="q2" value="c"> Porque ele aumenta a velocidade da internet do servidor.</label></li>
-                    <li><label><input type="radio" name="q2" value="d"> Porque ele exige que o hardware seja idêntico em todas as máquinas.</label></li>
-                </ul>
-            </div>
+            <div class="question">2. Por que usar containers resolve o problema do "Na minha máquina funciona"?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q2" value="a"> Porque o container leva as bibliotecas e versões exatas que a aplicação precisa.</label></li>
+                <li><label><input type="radio" name="q2" value="b"> Porque o Docker otimiza o código-fonte automaticamente para Linux e Windows.</label></li>
+                <li><label><input type="radio" name="q2" value="c"> Porque ele obriga todos os desenvolvedores a usarem o mesmo hardware físico.</label></li>
+                <li><label><input type="radio" name="q2" value="d"> Porque ele remove as dependências do código para que nada falhe.</label></li>
+            </ul>
 
-            <div class="question-block">
-                <div class="question-text">3. Qual a principal diferença entre uma Imagem e um Container?</div>
-                <ul class="options">
-                    <li><label><input type="radio" name="q3" value="a"> Imagens são para Windows e Containers para Linux.</label></li>
-                    <li><label><input type="radio" name="q3" value="b"> O Container é o arquivo de receita e a Imagem é o processo rodando.</label></li>
-                    <li><label><input type="radio" name="q3" value="c"> A Imagem é o pacote estático (blueprint) e o Container é a instância em execução.</label></li>
-                    <li><label><input type="radio" name="q3" value="d"> Imagens são pagas e Containers são gratuitos.</label></li>
-                </ul>
-            </div>
+            <div class="question">3. No contexto de Dockerização, qual a relação entre Imagem e Container?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q3" value="a"> São sinônimos e podem ser usados indiferentemente para o mesmo objeto.</label></li>
+                <li><label><input type="radio" name="q3" value="b"> A imagem é o processo rodando e o container é o arquivo de backup.</label></li>
+                <li><label><input type="radio" name="q3" value="c"> A imagem é o pacote estático (receita) e o container é uma instância dessa imagem em execução.</label></li>
+                <li><label><input type="radio" name="q3" value="d"> O container é o código-fonte e a imagem é o compilador utilizado.</label></li>
+            </ul>
 
-            <div class="question-block">
-                <div class="question-text">4. No Dockerfile, para que serve a instrução "FROM"?</div>
-                <ul class="options">
-                    <li><label><input type="radio" name="q4" value="a"> Para enviar a imagem para o Docker Hub.</label></li>
-                    <li><label><input type="radio" name="q4" value="b"> Para definir a imagem base (ex: python:3.10) de onde sua imagem partirá.</label></li>
-                    <li><label><input type="radio" name="q4" value="c"> Para deletar arquivos temporários do sistema.</label></li>
-                    <li><label><input type="radio" name="q4" value="d"> Para configurar a senha do banco de dados.</label></li>
-                </ul>
-            </div>
+            <div class="question">4. No arquivo docker-compose.yml, qual a principal função de um Orquestrador (como o Compose ou Kubernetes)?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q4" value="a"> Digitar o código da aplicação automaticamente para o desenvolvedor.</label></li>
+                <li><label><input type="radio" name="q4" value="b"> Gerenciar o ciclo de vida, a rede e a conectividade entre múltiplos containers.</label></li>
+                <li><label><input type="radio" name="q4" value="c"> Reduzir a velocidade do processador para economizar energia do servidor.</label></li>
+                <li><label><input type="radio" name="q4" value="d"> Substituir a necessidade de ter um Sistema Operacional no servidor.</label></li>
+            </ul>
 
-            <button class="btn" onclick="checkQuiz()">Finalizar Quiz</button>
+            <button class="btn" onclick="checkQuiz()">Verificar Respostas</button>
             <div id="quiz-result"></div>
         </div>
     </div>
@@ -153,4 +163,27 @@
 
 <script>
     function checkQuiz() {
-        const answers = { q1: 'b', q2: 'a', q3: 'c', q4:
+        let score = 0;
+        let q1 = document.querySelector('input[name="q1"]:checked');
+        let q2 = document.querySelector('input[name="q2"]:checked');
+        let q3 = document.querySelector('input[name="q3"]:checked');
+        let q4 = document.querySelector('input[name="q4"]:checked');
+        
+        if (q1 && q1.value === 'b') score++;
+        if (q2 && q2.value === 'a') score++;
+        if (q3 && q3.value === 'c') score++;
+        if (q4 && q4.value === 'b') score++;
+        
+        let resultDiv = document.getElementById('quiz-result');
+        if (score === 4) {
+            resultDiv.style.color = 'green';
+            resultDiv.innerText = 'Parabéns! Você acertou todas (4/4). Você domina os conceitos de isolamento, imagens e orquestração.';
+        } else {
+            resultDiv.style.color = '#d9534f';
+            resultDiv.innerText = `Você acertou ${score} de 4. Dica: Lembre-se que imagens são modelos estáticos e containers são os processos vivos!`;
+        }
+    }
+</script>
+
+</body>
+</html>
