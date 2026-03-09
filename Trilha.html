@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trilha de Aprendizagem: Dockerização e Orquestração</title>
+    <style>
+        :root {
+            --primary: #0db7ed;
+            --secondary: #24292e;
+            --bg: #f6f8fa;
+            --text: #333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        max-width { width: 100%; max-width: 900px; margin: auto; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1, h2, h3 { color: var(--secondary); }
+        h1 { text-align: center; border-bottom: 3px solid var(--primary); padding-bottom: 10px; }
+        .section { margin-bottom: 40px; padding: 20px; background: #fff; border-left: 5px solid var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn { display: inline-block; background: var(--primary); color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; }
+        .btn:hover { background: #0b9qc9; }
+        
+        /* Flashcards */
+        .flashcard-container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+        .flashcard { width: 250px; height: 150px; perspective: 1000px; cursor: pointer; }
+        .flashcard-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
+        .flashcard.flip .flashcard-inner { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back { width: 100%; height: 100%; position: absolute; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); text-align: center; }
+        .flashcard-front { background-color: var(--secondary); color: white; font-weight: bold; }
+        .flashcard-back { background-color: white; color: var(--secondary); transform: rotateY(180deg); border: 2px solid var(--secondary); }
+
+        /* Quiz */
+        .quiz-container { background: #eef2f5; padding: 20px; border-radius: 8px; margin-top: 20px; }
+        .question { margin-bottom: 15px; font-weight: bold; }
+        .options { list-style: none; padding: 0; }
+        .options li { margin-bottom: 10px; }
+        .options label { cursor: pointer; display: block; padding: 10px; background: white; border-radius: 4px; border: 1px solid #ddd; }
+        .options input:checked + span { font-weight: bold; color: var(--primary); }
+        #quiz-result { margin-top: 20px; font-weight: bold; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Trilha: Do Servidor Tradicional à Orquestração</h1>
+
+    <div class="section" id="contexto">
+        <h2>1. Contextualização</h2>
+        <p><strong>O Ambiente Tradicional:</strong> Geralmente, você tem um servidor físico ou uma máquina virtual (ex: um servidor rodando Ubuntu). Você instala todas as dependências do sistema operacional manualmente, como pacotes, bancos de dados e linguagens de programação.</p>
+        
+        <p><strong>Principais Problemas:</strong></p>
+        <ul>
+            <li><strong>Conflito de versões:</strong> Uma aplicação exige uma versão específica de uma biblioteca e outra aplicação no mesmo servidor exige uma versão diferente.</li>
+            <li><strong>"Na minha máquina funciona":</strong> O ambiente de desenvolvimento é diferente do ambiente de produção.</li>
+            <li><strong>Desperdício de recursos:</strong> Criar várias Máquinas Virtuais (VMs) consome muito processamento e memória (cada VM precisa de seu próprio Sistema Operacional).</li>
+        </ul>
+
+        <p><strong>O que é um ambiente orquestrado (Containerização):</strong> Em vez de virtualizar o hardware, nós empacotamos a aplicação e suas dependências em "Containers" (ex: Docker). O orquestrador (ex: Kubernetes ou Docker Swarm) é o maestro que gerencia esses containers: ele os reinicia se falharem, escala para mais máquinas se houver muito acesso e distribui a rede entre eles.</p>
+        
+        <p><strong>Vantagens:</strong> Isolamento total de processos, portabilidade, uso leve da infraestrutura e escalabilidade automatizada.</p>
+    </div>
+
+    <div class="section" id="imersao">
+        <h2>2. Imersão</h2>
+        <h3>Situação Problema</h3>
+        <p>Você gerencia um servidor Ubuntu que hospeda um sistema legado em Python 2.7. Agora, a equipe de desenvolvimento criou uma nova API de inteligência artificial fantástica que exige estritamente o Python 3.10. Instalar as duas versões e suas bibliotecas diretamente no servidor está causando quebras no sistema antigo e conflitos de dependência no Ubuntu.</p>
+        
+        <h3>Análise da Infraestrutura</h3>
+        <ul>
+            <li><strong>Ponto de falha atual:</strong> Acoplamento forte entre as aplicações e o SO hospedeiro.</li>
+            <li><strong>Justificativa para orquestrar:</strong> Isolar a aplicação legado e a nova API em containers separados. Isso permite que ambas rodem na mesma máquina física, cada uma com seu próprio ambiente perfeitamente isolado.</li>
+        </ul>
+
+        <h3>Recursos para Entendimento</h3>
+        <ul>
+            <li><a href="https://docs.docker.com/get-started/" target="_blank">Documentação Oficial: Docker Get Started</a></li>
+            <li><a href="https://kubernetes.io/pt-br/docs/concepts/overview/what-is-kubernetes/" target="_blank">O que é Kubernetes?</a></li>
+        </ul>
+    </div>
+
+    <div class="section" id="pratica">
+        <h2>3. Prática (Mão na Massa)</h2>
+        <p>Vamos simular a migração desse ambiente virtualizado conflituoso para um orquestrado.</p>
+        <p><strong>Ferramenta:</strong> Acesse o <a href="https://replit.com/" target="_blank">Replit</a> ou use o terminal do seu próprio ambiente Linux para criar um projeto e escrever dois arquivos fundamentais.</p>
+        
+        <ol>
+            <li><strong>O Dockerfile (Empacotando a nova API):</strong> Crie a receita da sua aplicação definindo a imagem base, instalando dependências e expondo a porta.</li>
+            <li><strong>O docker-compose.yml (Mini-Orquestração):</strong> Escreva o arquivo que sobe o banco de dados e a aplicação simultaneamente, conectando-os em uma rede virtual isolada.</li>
+        </ol>
+        <p><em>Desafio:</em> Tente subir os dois containers com o comando <code>docker-compose up -d</code> e veja sua aplicação rodando isolada do sistema operacional host!</p>
+    </div>
+
+    <div class="section" id="consolidacao">
+        <h2>4. Consolidação</h2>
+        <p>Teste seus conhecimentos sobre o processo de migração e os conceitos fundamentais.</p>
+
+        <h3>Flashcards de Revisão</h3>
+        <p>Clique nos cartões para revelar os conceitos.</p>
+        <div class="flashcard-container">
+            <div class="flashcard" onclick="this.classList.toggle('flip')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">Imagem Docker</div>
+                    <div class="flashcard-back">Um pacote imutável contendo código, bibliotecas e configurações necessárias para rodar um container.</div>
+                </div>
+            </div>
+            <div class="flashcard" onclick="this.classList.toggle('flip')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">Dockerfile</div>
+                    <div class="flashcard-back">Um arquivo de texto com as "receitas" (instruções) para construir uma Imagem Docker passo a passo.</div>
+                </div>
+            </div>
+            <div class="flashcard" onclick="this.classList.toggle('flip')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">Orquestrador</div>
+                    <div class="flashcard-back">Ferramenta que automatiza a implantação, escalabilidade e gerenciamento de vários containers.</div>
+                </div>
+            </div>
+        </div>
+
+        <hr style="margin: 40px 0; border: 1px solid #ddd;">
+
+        <h3>Quiz: Situação de Migração</h3>
+        <div class="quiz-container">
+            <div class="question">1. Durante a migração da aplicação legado para containers, o sistema acusou que não encontrava o banco de dados. Qual é a prática recomendada em ambientes orquestrados para resolver isso?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q1" value="a"> <span>Instalar o banco de dados diretamente dentro do mesmo container da aplicação.</span></label></li>
+                <li><label><input type="radio" name="q1" value="b"> <span>Criar um container separado para o banco de dados e conectá-los através de uma rede Docker ou serviço do orquestrador.</span></label></li>
+                <li><label><input type="radio" name="q1" value="c"> <span>Desistir do Docker e voltar a instalar tudo no Ubuntu hospedeiro.</span></label></li>
+            </ul>
+
+            <div class="question">2. Por que usar containers resolve o problema do "Na minha máquina funciona"?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q2" value="a"> <span>Porque o container leva junto o sistema de arquivos, as bibliotecas e as versões exatas que a aplicação precisa, garantindo o mesmo ambiente em qualquer lugar.</span></label></li>
+                <li><label><input type="radio" name="q2" value="b"> <span>Porque o Docker otimiza o código-fonte da aplicação automaticamente para rodar em Linux e Windows.</span></label></li>
+            </ul>
+
+            <button class="btn" onclick="checkQuiz()">Verificar Respostas</button>
+            <div id="quiz-result"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkQuiz() {
+        let score = 0;
+        let q1 = document.querySelector('input[name="q1"]:checked');
+        let q2 = document.querySelector('input[name="q2"]:checked');
+        
+        if (q1 && q1.value === 'b') score++;
+        if (q2 && q2.value === 'a') score++;
+        
+        let resultDiv = document.getElementById('quiz-result');
+        if (score === 2) {
+            resultDiv.style.color = 'green';
+            resultDiv.innerText = 'Parabéns! Você acertou todas. Entendeu bem a separação de serviços e a portabilidade dos containers.';
+        } else {
+            resultDiv.style.color = '#d9534f';
+            resultDiv.innerText = `Você acertou ${score} de 2. Revise os conceitos: containers separam aplicações de bancos de dados, e garantem portabilidade empacotando as dependências.`;
+        }
+    }
+</script>
+
+</body>
+</html>
